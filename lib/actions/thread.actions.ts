@@ -9,7 +9,7 @@ import Community from "../models/community.model";
 import connectToDB from "@/lib/mongoose";
 
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
-    connectToDB();
+    await connectToDB();
 
     // Calculate the number of posts to skip based on the page number and page size.
     const skipAmount = (pageNumber - 1) * pageSize;
@@ -58,19 +58,17 @@ interface Params {
 export async function createThread({text, author, communityId, path}: Params
 ) {
     try {
-        connectToDB();
+        await connectToDB();
 
         const communityIdObject = await Community.findOne(
             {id: communityId},
-            {_id: 1},)
-
-
+            {_id: 1}
+        );
         const createdThread = await Thread.create({
             text,
             author,
             community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
         });
-        console.log('CreatedThread:', createdThread); // Debugowanie
 
         // Update User model
         await User.findByIdAndUpdate(author, {
@@ -104,7 +102,7 @@ async function fetchAllChildThreads(threadId: string): Promise<any[]> {
 
 export async function deleteThread(id: string, path: string): Promise<void> {
     try {
-        connectToDB();
+        await connectToDB();
 
         // Find the thread to be deleted (the main thread)
         const mainThread = await Thread.findById(id).populate("author community");
@@ -159,10 +157,9 @@ export async function deleteThread(id: string, path: string): Promise<void> {
 }
 
 export async function fetchThreadById(threadId: string) {
-
+    await connectToDB();
 
     try {
-        await connectToDB();
         const thread = await Thread.findById(threadId)
             .populate({
                 path: "author",
@@ -208,7 +205,7 @@ export async function addCommentToThread(
     userId: string,
     path: string
 ) {
-    connectToDB();
+    await connectToDB();
 
     try {
         // Find the original thread by its ID

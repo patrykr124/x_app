@@ -1,5 +1,5 @@
 import {currentUser} from "@clerk/nextjs/server";
-import {fetchAllUsers, fetchUser} from "@/lib/actions/user.actions";
+import {fetchUser, fetchUsers} from "@/lib/actions/user.actions";
 import {redirect} from "next/navigation";
 import UserCard from "@/components/cards/UserCard";
 
@@ -16,7 +16,7 @@ async function Page() {
         redirect('/onboarding');
     }
 
-   const result = await fetchAllUsers({
+   const result = await fetchUsers({
        userId: user.id,
        searchString: "",
        pageNumber: 1,

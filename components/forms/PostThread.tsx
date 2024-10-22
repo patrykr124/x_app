@@ -15,7 +15,7 @@ export default function PostThread({userId}: { userId: string }) {
     const pathname = usePathname()
     const router = useRouter()
     const {organization} = useOrganization();
-
+    console.log(organization)
 
 
     const form = useForm({
@@ -27,6 +27,7 @@ export default function PostThread({userId}: { userId: string }) {
     })
 
     async function onSubmit(data: z.infer<typeof ThreadValidation>) {
+        console.log(organization)
         await createThread({
             text: data.thread,
             author: userId,
