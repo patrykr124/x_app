@@ -1,11 +1,16 @@
 import AccountProfile from "@/components/forms/AccountProfile";
-import { currentUser } from "@clerk/nextjs/server";
+import {currentUser} from "@clerk/nextjs/server";
+import {fetchUser} from "@/lib/actions/user.actions";
 
 
 export default async function page() {
     const user = await currentUser();
 
-    const userInfo = {}
+    if (!user) {
+        return null;
+    }
+
+    const userInfo = await fetchUser(user.id)
 
     const userData = {
         id: user?.id,
@@ -21,7 +26,7 @@ export default async function page() {
             <h1 className="head-text">OnBoarding</h1>
             <p className="mt-3 text-base-regular text-light-2">Complete your profile now to use Thread</p>
             <section className="mt-9 bg-dark-2 p-10 rounded-lg">
-                <AccountProfile user={userData} />
+                <AccountProfile user={userData}/>
             </section>
         </main>
     )
