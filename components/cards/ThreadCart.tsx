@@ -27,7 +27,7 @@ interface Props {
 }
 
 function ThreadCart({id, currentUserId, parentId, content, author, community, createdAt, comments, isComment}: Props) {
-    console.log(community)
+
     return (
         <article className={`flex w-full flex-col rounded-xl bg-dark-2 p-7 `}>
             <div className="flex items-start justify-between">

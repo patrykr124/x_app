@@ -159,9 +159,10 @@ export async function deleteThread(id: string, path: string): Promise<void> {
 }
 
 export async function fetchThreadById(threadId: string) {
-    connectToDB();
+
 
     try {
+        await connectToDB();
         const thread = await Thread.findById(threadId)
             .populate({
                 path: "author",
