@@ -15,7 +15,7 @@ export default async function Home() {
 
 
     return (
-        <section className="mt-9 flex flex-col gap-10">
+        <section className="mt-9 flex flex-col gap-8">
             {threadFetch.posts.length === 0 ? (
                 <div className="flex flex-col items-center justify-center gap-10">
                     <p className="no-result">No threads found</p>
