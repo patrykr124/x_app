@@ -1,5 +1,5 @@
-import {fetchUserPost} from "@/lib/actions/user.actions";
 import ThreadCart from "@/components/cards/ThreadCart";
+import {fetchUserPosts} from "@/lib/actions/user.actions";
 
 interface Props {
     currentUserId: string;
@@ -10,8 +10,7 @@ interface Props {
 async function Threadstab({currentUserId, accountId, accountType}: Props) {
     //fetch profile threads
 
-    const post = await fetchUserPost(accountId)
-    console.log(post);
+    const post = await fetchUserPosts(accountId)
 
 
     return (

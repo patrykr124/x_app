@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import {isComment} from "postcss-selector-parser";
+import {formatDateString} from "@/lib/utils";
 
 interface Props {
     id: string;
@@ -17,7 +17,7 @@ interface Props {
         name: string;
         image: string;
     }
-    createdAt: Date;
+    createdAt: string;
     comments: {
         author: {
             image: string;
@@ -26,7 +26,8 @@ interface Props {
     isComment?: boolean;
 }
 
-function ThreadCart({id, currentUserId, parentId, content, author, community, createdAt, comments,isComment}: Props) {
+function ThreadCart({id, currentUserId, parentId, content, author, community, createdAt, comments, isComment}: Props) {
+    console.log(community)
     return (
         <article className={`flex w-full flex-col rounded-xl bg-dark-2 p-7 `}>
             <div className="flex items-start justify-between">
@@ -67,6 +68,27 @@ function ThreadCart({id, currentUserId, parentId, content, author, community, cr
                     </div>
                 </div>
             </div>
+            {!isComment && community && (
+                <Link
+                    href={`/communities/${community.id}`}
+                    className='mt-5 flex items-center'
+                >
+                    <p className='text-subtle-medium text-gray-1'>
+                        {formatDateString(createdAt)}
+                        {community && ` - ${community.name} Community`}
+                    </p>
+
+                    <Image
+                        src={community.image}
+                        alt={community.name}
+                        width={14}
+                        height={14}
+                        className='ml-1 rounded-full object-cover'
+                    />
+                </Link>
+            )}
+
+
         </article>
     );
 }

@@ -2,9 +2,9 @@ import ThreadCart from "@/components/cards/ThreadCart";
 import {currentUser} from "@clerk/nextjs/server";
 import {fetchUser} from "@/lib/actions/user.actions";
 import {redirect} from "next/navigation";
-import {fetchThread} from "@/lib/actions/thread.actions";
+
 import Comment from "@/components/forms/Comment";
-import {children} from "effect/Fiber";
+import {fetchThreadById} from "@/lib/actions/thread.actions";
 
 async function Page({params}: { params: { id: string } }) {
     if (!params.id) return null;
@@ -14,7 +14,7 @@ async function Page({params}: { params: { id: string } }) {
     const userInfo = await fetchUser(user.id);
     if (!userInfo?.onboarded) redirect('/onboarding');
 
-    const threadInfo = await fetchThread(params.id);
+    const threadInfo = await fetchThreadById(params.id);
     return (
         <section className="relative">
             <div className="">
@@ -53,7 +53,7 @@ async function Page({params}: { params: { id: string } }) {
                                 isComment
                     />
 
-                    ))}
+                ))}
             </div>
         </section>
     );

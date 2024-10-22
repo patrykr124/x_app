@@ -1,14 +1,16 @@
-import {fetchPost} from "@/lib/actions/thread.actions";
+
 
 import ThreadCart from "@/components/cards/ThreadCart";
 import {currentUser} from "@clerk/nextjs/server";
 
 import Link from "next/link";
+import {fetchPosts} from "@/lib/actions/thread.actions";
 
 
 export default async function Home() {
 
-    const threadFetch = await fetchPost(1, 30);
+    const threadFetch = await fetchPosts(1, 30);
+
     const user = await currentUser();
 
 
