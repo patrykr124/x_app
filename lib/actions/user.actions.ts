@@ -1,7 +1,7 @@
 "use server";
 
-import { FilterQuery, SortOrder } from "mongoose";
-import { revalidatePath } from "next/cache";
+import {FilterQuery, SortOrder} from "mongoose";
+import {revalidatePath} from "next/cache";
 
 import Community from "../models/community.model";
 import Thread from "../models/thread.model";
@@ -9,12 +9,11 @@ import User from "../models/user.model";
 import connectToDB from "@/lib/mongoose";
 
 
-
 export async function fetchUser(userId: string) {
     try {
         connectToDB();
 
-        return await User.findOne({ id: userId }).populate({
+        return await User.findOne({id: userId}).populate({
             path: "communities",
             model: Community,
         });
@@ -44,7 +43,7 @@ export async function updateUser({
         connectToDB();
 
         await User.findOneAndUpdate(
-            { id: userId },
+            {id: userId},
             {
                 username: username.toLowerCase(),
                 name,
@@ -52,7 +51,7 @@ export async function updateUser({
                 image,
                 onboarded: true,
             },
-            { upsert: true }
+            {upsert: true}
         );
 
         if (path === "/profile/edit") {
@@ -68,7 +67,7 @@ export async function fetchUserPosts(userId: string) {
         connectToDB();
 
         // Find all threads authored by the user with the given userId
-        const threads = await User.findOne({ id: userId }).populate({
+        const threads = await User.findOne({id: userId}).populate({
             path: "threads",
             model: Thread,
             populate: [
@@ -120,19 +119,19 @@ export async function fetchUsers({
 
         // Create an initial query object to filter users.
         const query: FilterQuery<typeof User> = {
-            id: { $ne: userId }, // Exclude the current user from the results.
+            id: {$ne: userId}, // Exclude the current user from the results.
         };
 
         // If the search string is not empty, add the $or operator to match either username or name fields.
         if (searchString.trim() !== "") {
             query.$or = [
-                { username: { $regex: regex } },
-                { name: { $regex: regex } },
+                {username: {$regex: regex}},
+                {name: {$regex: regex}},
             ];
         }
 
         // Define the sort options for the fetched users based on createdAt field and provided sort order.
-        const sortOptions = { createdAt: sortBy };
+        const sortOptions = {createdAt: sortBy};
 
         const usersQuery = User.find(query)
             .sort(sortOptions)
@@ -147,7 +146,7 @@ export async function fetchUsers({
         // Check if there are more users beyond the current page.
         const isNext = totalUsersCount > skipAmount + users.length;
 
-        return { users, isNext };
+        return {users, isNext};
     } catch (error) {
         console.error("Error fetching users:", error);
         throw error;
@@ -159,7 +158,7 @@ export async function getActivity(userId: string) {
         connectToDB();
 
         // Find all threads created by the user
-        const userThreads = await Thread.find({ author: userId });
+        const userThreads = await Thread.find({author: userId});
 
         // Collect all the child thread ids (replies) from the 'children' field of each user thread
         const childThreadIds = userThreads.reduce((acc, userThread) => {
@@ -168,8 +167,8 @@ export async function getActivity(userId: string) {
 
         // Find and return the child threads (replies) excluding the ones created by the same user
         const replies = await Thread.find({
-            _id: { $in: childThreadIds },
-            author: { $ne: userId }, // Exclude threads authored by the same user
+            _id: {$in: childThreadIds},
+            author: {$ne: userId}, // Exclude threads authored by the same user
         }).populate({
             path: "author",
             model: User,
