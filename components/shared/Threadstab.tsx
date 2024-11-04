@@ -11,7 +11,7 @@ async function Threadstab({currentUserId, accountId, accountType}: Props) {
     //fetch profile threads
 
     const post = await fetchUserPosts(accountId)
-
+    console.log(post)
 
     return (
         <section className="mt-9 flex flex-col gap-10">

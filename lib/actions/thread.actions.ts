@@ -1,20 +1,16 @@
 "use server";
-
 import {revalidatePath} from "next/cache";
-
-
 import User from "../models/user.model";
 import Thread from "../models/thread.model";
 import Community from "../models/community.model";
 import connectToDB from "@/lib/mongoose";
+import {NextApiRequest, NextApiResponse} from "next";
 
-export async function fetchPosts(pageNumber = 1, pageSize = 20) {
+export async function fetchPosts(pageNumber = 1, pageSize = 2) {
     await connectToDB();
 
-    // Calculate the number of posts to skip based on the page number and page size.
     const skipAmount = (pageNumber - 1) * pageSize;
 
-    // Create a query to fetch the posts that have no parent (top-level threads) (a thread that is not a comment/reply).
     const postsQuery = Thread.find({parentId: {$in: [null, undefined]}})
         .sort({createdAt: "desc"})
         .skip(skipAmount)
@@ -236,4 +232,26 @@ export async function addCommentToThread(
         console.error("Error while adding comment:", err);
         throw new Error("Unable to add comment");
     }
+}
+
+export default async function searchUser(reg: NextApiRequest, res: NextApiResponse) {
+    await connectToDB();
+
+    const {searchString} = reg.query;
+
+
+    try{
+        const users = await User.find({
+            $or: [
+                {name: {$regex: searchString, $options: "i"}},
+                {username: {$regex: searchString, $options: "i"}},
+            ],
+        });
+
+        res.status(200).json(users);
+    } catch (err){
+        console.error("Error while searching user:", err);
+        throw new Error("Unable to search user");
+    }
+
 }

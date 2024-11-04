@@ -1,5 +1,3 @@
-
-
 import ThreadCart from "@/components/cards/ThreadCart";
 import {currentUser} from "@clerk/nextjs/server";
 
@@ -15,7 +13,7 @@ export default async function Home() {
 
 
     return (
-        <section className="mt-9 flex flex-col gap-8">
+        <section className="mt-9 flex flex-col gap-6">
             {threadFetch.posts.length === 0 ? (
                 <div className="flex flex-col items-center justify-center gap-10">
                     <p className="no-result">No threads found</p>

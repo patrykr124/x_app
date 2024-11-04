@@ -19,7 +19,7 @@ async function Page() {
 
     return (
         <section>
-            <section className="mt-10 flex flex-col gap-5">
+            <section className="mt-10 flex flex-col gap-5 justify-center items-center">
                 {activities.length > 0 ? (<>
                     {activities.map((activity) => (
                         <Link key={activity._id} href={`/thread/${activity.parentId}`}>
@@ -35,7 +35,7 @@ async function Page() {
                             </article>
                         </Link>
                     ))}
-                </>) : (<p className="text-base-regular text-light-3">No activity yet</p>)}
+                </>) : (<p className="text-base-regular text-light-3">No notifications yet</p>)}
             </section>
         </section>
     );

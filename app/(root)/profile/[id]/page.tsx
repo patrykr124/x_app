@@ -8,13 +8,12 @@ import Image from "next/image";
 import Threadstab from "@/components/shared/Threadstab";
 
 async function Page({params}: { params: { id: string } }) {
-    const user = currentUser();
+    const user = await currentUser();
     if (!user) return null;
 
     const userInfo = await fetchUser(params.id);
 
     if (!userInfo) redirect('/onboarding');
-
 
 
     return (
@@ -32,15 +31,13 @@ async function Page({params}: { params: { id: string } }) {
                                     <p className="ml-1 rounded-xl bg-light-4 px-2 py-1 text-tiny-medium text-light-2">
                                         {userInfo?.threads?.length}
                                     </p>
-                                ) }
+                                )}
                             </TabsTrigger>
                         ))}
                     </TabsList>
                     {profileTabs.map((tab) => (
                         <TabsContent key={tab.label} value={tab.value} className="w-full text-light-1">
-                            <Threadstab currentUserId={user.id} accountId={userInfo.id} accountType="User">
-
-                            </Threadstab>
+                            <Threadstab currentUserId={user.id} accountId={userInfo.id} accountType="User"></Threadstab>
                         </TabsContent>
                     ))}
                 </Tabs>

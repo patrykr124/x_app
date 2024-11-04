@@ -9,7 +9,7 @@ interface Props {
     bio: string;
 }
 
-function ProfileHeader({name, username, accountId, authUserId, imgUrl, bio} : Props) {
+function ProfileHeader({name, username, accountId, imgUrl, bio} : Props) {
     return (
         <div className="flex w-full flex-col justify-start">
             <div className="flex items-center justify-between">
